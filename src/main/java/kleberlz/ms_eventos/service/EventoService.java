@@ -1,5 +1,8 @@
 package kleberlz.ms_eventos.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +13,8 @@ import kleberlz.ms_eventos.exceptions.DataHoraInvalidaException;
 import kleberlz.ms_eventos.mapper.EventoMapper;
 import kleberlz.ms_eventos.model.CategoriaEvento;
 import kleberlz.ms_eventos.model.Evento;
+import kleberlz.ms_eventos.model.Status;
+import kleberlz.ms_eventos.model.TipoEvento;
 import kleberlz.ms_eventos.repository.EventoRepository;
 import kleberlz.ms_eventos.validator.EventoValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -80,6 +85,49 @@ public class EventoService {
 		
 		List<Evento> eventos = eventoRepository.findByCategoriaEvento(categoria);
 		log.info("Buscando eventos pela categoria: '{}'. Evento(s) encontrado(s): {}", categoria, eventos);
+		return eventos;
+	}
+	
+	public List<Evento> buscarPorTipo(TipoEvento tipo) {
+		
+		List<Evento> eventos = eventoRepository.findByTipoEvento(tipo);
+		log.info("Buscando eventos pelo tipo: '{}'. Evento(s) encontrado(s): {}", tipo, eventos);
+		return eventos;
+	}
+	
+	public List<Evento> buscarPorData(LocalDate data) {
+		//Achei melhor que fosse buscado somente por data, sem precisar colocar as horas.
+		LocalDateTime inicioDoDia = data.atStartOfDay();
+		LocalDateTime fimDoDia = data.atTime(LocalTime.MAX);
+		
+		return eventoRepository.findByDataHoraBetween(inicioDoDia, fimDoDia);
+	}
+	
+	public List<Evento> buscarPorEndereco(String endereco) {
+		
+		List<Evento> eventos = eventoRepository.findByEndereco(endereco);
+		log.info("Buscando eventos pelo endereço: '{}'. Evento(s) encontrado(s): {}", endereco, eventos);
+		return eventos;
+	}
+	
+	public List<Evento> buscarPorStatus(Status status) {
+		
+		List<Evento> eventos = eventoRepository.findByStatus(status);
+		log.info("Buscando eventos pelo status: '{}'. Evento(s) encontrado(s): {}", status, eventos);
+		return eventos;	
+	}
+	
+	public List<Evento> buscarPorQuantidadeIngressos(Integer quantidadeIngressos) {
+		
+		List<Evento> eventos = eventoRepository.findByQuantidadeIngressos(quantidadeIngressos);
+		log.info("Buscando eventos pela quantidade de ingressos: '{}'. Evento(s) encontrado(s): {}", quantidadeIngressos, eventos);
+		return eventos;
+	}
+	
+	public List<Evento> buscarPorIngressosDisponiveis(Integer ingressosDisponiveis) {
+		
+		List<Evento> eventos = eventoRepository.findByIngressosDisponiveis(ingressosDisponiveis);
+		log.info("Buscando eventos pelos ingressos disponíveis: '{}'. Evento(s) encontrado(s): {}", ingressosDisponiveis, eventos);
 		return eventos;
 	}
 	
