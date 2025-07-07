@@ -25,4 +25,10 @@ public class GlobalExceptionHandler {
 		ErroResposta erro = new ErroResposta(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "Nome inválido.");
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
+	
+	@ExceptionHandler(EventoNaoEncontradoException.class)
+	public ResponseEntity<ErroResposta> handleEventoNaoEncontrado(EventoNaoEncontradoException ex) {
+		ErroResposta erro = new ErroResposta(ex.getMessage(), HttpStatus.NOT_FOUND.value(), "Evento inexistente.");
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+	}
 }

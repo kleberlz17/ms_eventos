@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import kleberlz.ms_eventos.dto.EventoDetalhadoDTO;
 import kleberlz.ms_eventos.exceptions.DataHoraInvalidaException;
+import kleberlz.ms_eventos.exceptions.EventoNaoEncontradoException;
 import kleberlz.ms_eventos.mapper.EventoMapper;
 import kleberlz.ms_eventos.model.CategoriaEvento;
 import kleberlz.ms_eventos.model.Evento;
@@ -131,6 +132,12 @@ public class EventoService {
 		return eventos;
 	}
 	
-	
+	public void deletarEventoPorId(Long idEvento) {
+		Evento eventoDeletado = eventoRepository.findById(idEvento)
+				.orElseThrow(() -> new EventoNaoEncontradoException("Evento de ID {} " + idEvento + "não encontrado no sistema."));
+		
+		eventoRepository.delete(eventoDeletado);
+		log.info("O evento de ID {} e nome {} foi deletado com sucesso.", idEvento, eventoDeletado.getNomeEvento());
+	}
 			
 }
